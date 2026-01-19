@@ -1,0 +1,16 @@
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\DatabaseConnection.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\IAuthenticationController.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\ICore.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\IIOController.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\IPlugin.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\IPluginController.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\IUIController.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\IVehiclePlugin.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\models\Customer.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\models\Rental.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\models\Vehicle.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\models\VehicleType.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\services\CustomerService.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\services\RentalService.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\services\VehicleService.java
+C:\Users\Caio Gabriel\Documents\Eu\MyProjects\IFBA\Trabalho-POO\microkernel\interfaces\src\main\java\br\edu\ifba\inf008\interfaces\ui\RentalForm.java

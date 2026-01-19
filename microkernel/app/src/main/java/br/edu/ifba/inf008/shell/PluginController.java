@@ -9,11 +9,31 @@ import java.io.FilenameFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class PluginController implements IPluginController
-{
+public class PluginController implements IPluginController {
     public boolean init() {
         try {
-            File currentDir = new File("./plugins");
+            // Tenta múltiplos caminhos para encontrar a pasta plugins
+            String[] possiblePaths = {
+                    "./plugins",
+                    "../plugins",
+                    "microkernel/plugins",
+                    System.getProperty("user.dir") + "/plugins"
+            };
+
+            File currentDir = null;
+            for (String path : possiblePaths) {
+                File testDir = new File(path);
+                if (testDir.exists() && testDir.isDirectory()) {
+                    currentDir = testDir;
+                    System.out.println("Plugins directory found: " + testDir.getAbsolutePath());
+                    break;
+                }
+            }
+
+            if (currentDir == null || !currentDir.exists()) {
+                System.out.println("Warning: plugins directory not found. No plugins will be loaded.");
+                return true;
+            }
 
             // Define a FilenameFilter to include only .jar files
             FilenameFilter jarFilter = new FilenameFilter() {
@@ -23,25 +43,39 @@ public class PluginController implements IPluginController
                 }
             };
 
-            String []plugins = currentDir.list(jarFilter);
-            int i;
-            URL[] jars = new URL[plugins.length];
-            for (i = 0; i < plugins.length; i++)
-            {
-                jars[i] = (new File("./plugins/" + plugins[i])).toURL();
+            String[] plugins = currentDir.list(jarFilter);
+
+            if (plugins == null || plugins.length == 0) {
+                System.out.println("No plugins found in " + currentDir.getAbsolutePath());
+                return true;
             }
+
+            System.out.println("Found " + plugins.length + " plugins");
+
+            URL[] jars = new URL[plugins.length];
+            for (int i = 0; i < plugins.length; i++) {
+                jars[i] = new File(currentDir, plugins[i]).toURI().toURL();
+                System.out.println("Loading plugin: " + plugins[i]);
+            }
+
             URLClassLoader ulc = new URLClassLoader(jars, App.class.getClassLoader());
-            for (i = 0; i < plugins.length; i++)
-            {
+
+            for (int i = 0; i < plugins.length; i++) {
                 String pluginName = plugins[i].split("\\.")[0];
-                IPlugin plugin = (IPlugin) Class.forName("br.edu.ifba.inf008.plugins." + pluginName, true, ulc).newInstance();
-                plugin.init();
+                try {
+                    IPlugin plugin = (IPlugin) Class.forName("br.edu.ifba.inf008.plugins." + pluginName, true, ulc)
+                            .getDeclaredConstructor().newInstance();
+                    plugin.init();
+                    System.out.println("Plugin initialized: " + pluginName);
+                } catch (Exception e) {
+                    System.out.println("Failed to load plugin " + pluginName + ": " + e.getMessage());
+                }
             }
 
             return true;
         } catch (Exception e) {
             System.out.println("Error: " + e.getClass().getName() + " - " + e.getMessage());
-
+            e.printStackTrace();
             return false;
         }
     }
