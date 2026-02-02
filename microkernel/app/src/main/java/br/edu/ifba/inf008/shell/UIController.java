@@ -4,6 +4,10 @@ import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.shell.PluginController;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Priority;
+import javafx.beans.binding.Bindings;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
@@ -17,8 +21,7 @@ import javafx.scene.control.Tab;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 
-public class UIController extends Application implements IUIController
-{
+public class UIController extends Application implements IUIController {
     private ICore core;
     private MenuBar menuBar;
     private TabPane tabPane;
@@ -38,7 +41,7 @@ public class UIController extends Application implements IUIController
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Locadora de veículos");
+        primaryStage.setTitle("Car Rental");
 
         menuBar = new MenuBar();
 
@@ -47,7 +50,16 @@ public class UIController extends Application implements IUIController
         tabPane = new TabPane();
         tabPane.setSide(Side.BOTTOM);
 
-        vBox.getChildren().addAll(tabPane);
+        Label welcomeLabel = new Label("Welcome to Car Rental");
+        welcomeLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: bold;");
+
+        welcomeLabel.visibleProperty().bind(Bindings.isEmpty(tabPane.getTabs()));
+
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(welcomeLabel, tabPane);
+        VBox.setVgrow(stackPane, Priority.ALWAYS);
+
+        vBox.getChildren().addAll(stackPane);
 
         Scene scene = new Scene(vBox, 960, 600);
 
@@ -58,7 +70,6 @@ public class UIController extends Application implements IUIController
     }
 
     public MenuItem createMenuItem(String menuText, String menuItemText) {
-        // Criar o menu caso ele nao exista
         Menu newMenu = null;
         for (Menu menu : menuBar.getMenus()) {
             if (menu.getText() == menuText) {
@@ -71,7 +82,6 @@ public class UIController extends Application implements IUIController
             menuBar.getMenus().add(newMenu);
         }
 
-        // Criar o menu item neste menu
         MenuItem menuItem = new MenuItem(menuItemText);
         newMenu.getItems().add(menuItem);
 
@@ -83,6 +93,8 @@ public class UIController extends Application implements IUIController
         tab.setText(tabText);
         tab.setContent(contents);
         tabPane.getTabs().add(tab);
+
+        tabPane.getSelectionModel().select(tab);
 
         return true;
     }

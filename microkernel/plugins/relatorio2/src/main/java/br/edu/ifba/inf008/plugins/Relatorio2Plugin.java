@@ -27,22 +27,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Plugin Relatório 2: Tabela com dados gerais sobre as locações.
- * Utiliza TableView JavaFX conforme especificação.
- */
+
 public class Relatorio2Plugin implements IPlugin {
 
     @Override
     public boolean init() {
         IUIController uiController = ICore.getInstance().getUIController();
 
-        MenuItem menuItem = uiController.createMenuItem("Relatórios", "Dados de Locações");
+        MenuItem menuItem = uiController.createMenuItem("Reports", "Rental Data");
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 VBox content = createReportContent();
-                uiController.createTab("Relatório - Locações", content);
+                uiController.createTab("Report - Rentals", content);
             }
         });
 
@@ -53,38 +50,38 @@ public class Relatorio2Plugin implements IPlugin {
         VBox vbox = new VBox(15);
         vbox.setPadding(new Insets(20));
 
-        Label titleLabel = new Label("Dados Gerais das Locações");
+        Label titleLabel = new Label("General Rental Data");
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         TableView<RentalReport> tableView = new TableView<>();
         tableView.setPrefHeight(500);
 
-        // Create columns
+
         TableColumn<RentalReport, Integer> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(cellData -> cellData.getValue().rentalIdProperty().asObject());
         idCol.setPrefWidth(50);
 
-        TableColumn<RentalReport, String> customerCol = new TableColumn<>("Cliente");
+        TableColumn<RentalReport, String> customerCol = new TableColumn<>("Customer");
         customerCol.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
         customerCol.setPrefWidth(150);
 
-        TableColumn<RentalReport, String> customerTypeCol = new TableColumn<>("Tipo Cliente");
+        TableColumn<RentalReport, String> customerTypeCol = new TableColumn<>("Customer Type");
         customerTypeCol.setCellValueFactory(cellData -> cellData.getValue().customerTypeProperty());
         customerTypeCol.setPrefWidth(100);
 
-        TableColumn<RentalReport, String> vehicleCol = new TableColumn<>("Veículo");
+        TableColumn<RentalReport, String> vehicleCol = new TableColumn<>("Vehicle");
         vehicleCol.setCellValueFactory(cellData -> cellData.getValue().vehicleProperty());
         vehicleCol.setPrefWidth(150);
 
-        TableColumn<RentalReport, String> vehicleTypeCol = new TableColumn<>("Tipo Veículo");
+        TableColumn<RentalReport, String> vehicleTypeCol = new TableColumn<>("Vehicle Type");
         vehicleTypeCol.setCellValueFactory(cellData -> cellData.getValue().vehicleTypeProperty());
         vehicleTypeCol.setPrefWidth(100);
 
-        TableColumn<RentalReport, String> startDateCol = new TableColumn<>("Data Início");
+        TableColumn<RentalReport, String> startDateCol = new TableColumn<>("Start Date");
         startDateCol.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
         startDateCol.setPrefWidth(100);
 
-        TableColumn<RentalReport, Double> totalCol = new TableColumn<>("Valor Total");
+        TableColumn<RentalReport, Double> totalCol = new TableColumn<>("Total Amount");
         totalCol.setCellValueFactory(cellData -> cellData.getValue().totalAmountProperty().asObject());
         totalCol.setPrefWidth(100);
 
@@ -92,7 +89,7 @@ public class Relatorio2Plugin implements IPlugin {
         rentalStatusCol.setCellValueFactory(cellData -> cellData.getValue().rentalStatusProperty());
         rentalStatusCol.setPrefWidth(100);
 
-        TableColumn<RentalReport, String> paymentStatusCol = new TableColumn<>("Pagamento");
+        TableColumn<RentalReport, String> paymentStatusCol = new TableColumn<>("Payment");
         paymentStatusCol.setCellValueFactory(cellData -> cellData.getValue().paymentStatusProperty());
         paymentStatusCol.setPrefWidth(100);
 
@@ -100,13 +97,13 @@ public class Relatorio2Plugin implements IPlugin {
                 vehicleTypeCol, startDateCol, totalCol,
                 rentalStatusCol, paymentStatusCol);
 
-        // Load data
+
         ObservableList<RentalReport> data = loadReportData();
         tableView.setItems(data);
 
-        Label countLabel = new Label("Total de registros: " + data.size());
+        Label countLabel = new Label("Total records: " + data.size());
         countLabel.setStyle("-fx-font-style: italic;");
-
+        
         vbox.getChildren().addAll(titleLabel, tableView, countLabel);
         return vbox;
     }
@@ -114,7 +111,7 @@ public class Relatorio2Plugin implements IPlugin {
     private ObservableList<RentalReport> loadReportData() {
         List<RentalReport> reports = new ArrayList<>();
 
-        // Query from report2.sql
+
         String sql = """
                 SELECT
                     r.rental_id,
@@ -122,7 +119,7 @@ public class Relatorio2Plugin implements IPlugin {
                     c.customer_type,
                     CONCAT(v.make, ' ', v.model) as vehicle,
                     vt.type_name as vehicle_type,
-                    DATE_FORMAT(r.start_date, '%Y-%m-%d') as start_date,
+                    DATE_FORMAT(r.start_date, '%d/%m/%Y') as start_date,
                     r.total_amount,
                     r.rental_status,
                     r.payment_status
@@ -158,9 +155,7 @@ public class Relatorio2Plugin implements IPlugin {
         return FXCollections.observableArrayList(reports);
     }
 
-    /**
-     * Classe interna para representar dados do relatório na TableView.
-     */
+
     public static class RentalReport {
         private final SimpleIntegerProperty rentalId;
         private final SimpleStringProperty customerName;

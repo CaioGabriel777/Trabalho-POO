@@ -23,10 +23,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Formulário reutilizável para locação de veículos.
- * Usado por todos os plugins de tipos de veículos.
- */
 public class RentalForm extends VBox {
 
     private ComboBox<Customer> customerComboBox;
@@ -60,35 +56,35 @@ public class RentalForm extends VBox {
     }
 
     private void initializeComponents() {
-        
-        Label titleLabel = new Label("Locação de Veículo - " + typeName);
+
+        Label titleLabel = new Label("Vehicle Rental - " + typeName);
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        Label customerLabel = new Label("Cliente (Email):");
+        Label customerLabel = new Label("Customer (Email):");
         customerComboBox = new ComboBox<>();
-        customerComboBox.setPromptText("Selecione o cliente");
+        customerComboBox.setPromptText("Select customer");
         customerComboBox.setPrefWidth(300);
 
-        Label vehicleLabel = new Label("Veículos Disponíveis:");
+        Label vehicleLabel = new Label("Available Vehicles:");
         vehicleTable = new TableView<>();
         vehicleTable.setPrefHeight(200);
 
-        TableColumn<Vehicle, String> makeCol = new TableColumn<>("Marca");
+        TableColumn<Vehicle, String> makeCol = new TableColumn<>("Make");
         makeCol.setCellValueFactory(new PropertyValueFactory<>("make"));
 
-        TableColumn<Vehicle, String> modelCol = new TableColumn<>("Modelo");
+        TableColumn<Vehicle, String> modelCol = new TableColumn<>("Model");
         modelCol.setCellValueFactory(new PropertyValueFactory<>("model"));
 
-        TableColumn<Vehicle, Integer> yearCol = new TableColumn<>("Ano");
+        TableColumn<Vehicle, Integer> yearCol = new TableColumn<>("Year");
         yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
 
-        TableColumn<Vehicle, String> fuelCol = new TableColumn<>("Combustível");
+        TableColumn<Vehicle, String> fuelCol = new TableColumn<>("Fuel");
         fuelCol.setCellValueFactory(new PropertyValueFactory<>("fuelType"));
 
-        TableColumn<Vehicle, String> transCol = new TableColumn<>("Câmbio");
+        TableColumn<Vehicle, String> transCol = new TableColumn<>("Transmission");
         transCol.setCellValueFactory(new PropertyValueFactory<>("transmission"));
 
-        TableColumn<Vehicle, Double> mileageCol = new TableColumn<>("Quilometragem");
+        TableColumn<Vehicle, Double> mileageCol = new TableColumn<>("Mileage");
         mileageCol.setCellValueFactory(new PropertyValueFactory<>("mileage"));
 
         vehicleTable.getColumns().addAll(makeCol, modelCol, yearCol, fuelCol, transCol, mileageCol);
@@ -100,33 +96,60 @@ public class RentalForm extends VBox {
 
         startDatePicker = new DatePicker(LocalDate.now());
         endDatePicker = new DatePicker(LocalDate.now().plusDays(1));
-        pickupLocationField = new TextField();
-        pickupLocationField.setPromptText("Local de retirada");
-        baseRateField = new TextField();
-        baseRateField.setPromptText("Valor da diária");
-        insuranceFeeField = new TextField();
-        insuranceFeeField.setPromptText("Valor do seguro");
 
-        formGrid.add(new Label("Data Início:"), 0, 0);
+        formatDatePicker(startDatePicker);
+        formatDatePicker(endDatePicker);
+
+        startDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                endDatePicker.setDayCellFactory(picker -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        setDisable(empty || date.isBefore(newValue));
+                    }
+                });
+                if (endDatePicker.getValue() != null && endDatePicker.getValue().isBefore(newValue)) {
+                    endDatePicker.setValue(newValue.plusDays(1));
+                }
+            }
+        });
+
+        endDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(startDatePicker.getValue()));
+            }
+        });
+
+        pickupLocationField = new TextField();
+        pickupLocationField.setPromptText("Pickup Location");
+        baseRateField = new TextField();
+        baseRateField.setPromptText("Daily Rate");
+        insuranceFeeField = new TextField();
+        insuranceFeeField.setPromptText("Insurance Fee");
+
+        formGrid.add(new Label("Start Date:"), 0, 0);
         formGrid.add(startDatePicker, 1, 0);
-        formGrid.add(new Label("Data Fim:"), 2, 0);
+        formGrid.add(new Label("End Date:"), 2, 0);
         formGrid.add(endDatePicker, 3, 0);
 
-        formGrid.add(new Label("Local de Retirada:"), 0, 1);
+        formGrid.add(new Label("Pickup Location:"), 0, 1);
         formGrid.add(pickupLocationField, 1, 1);
 
-        formGrid.add(new Label("Diária (R$):"), 0, 2);
+        formGrid.add(new Label("Daily Rate (R$):"), 0, 2);
         formGrid.add(baseRateField, 1, 2);
-        formGrid.add(new Label("Seguro (R$):"), 2, 2);
+        formGrid.add(new Label("Insurance (R$):"), 2, 2);
         formGrid.add(insuranceFeeField, 3, 2);
 
-        totalLabel = new Label("Valor Total: R$ 0,00");
+        totalLabel = new Label("Total Amount: R$ 0.00");
         totalLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2196F3;");
 
-        Button calculateButton = new Button("Calcular Total");
+        Button calculateButton = new Button("Calculate Total");
         calculateButton.setOnAction(e -> calculateTotal());
 
-        confirmButton = new Button("Confirmar Locação");
+        confirmButton = new Button("Confirm Rental");
         confirmButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         confirmButton.setOnAction(e -> confirmRental());
 
@@ -168,9 +191,9 @@ public class RentalForm extends VBox {
 
             double total = plugin.calculateTotal(baseRate, days, insuranceFee, additionalFees);
 
-            totalLabel.setText(String.format("Valor Total: R$ %.2f", total));
+            totalLabel.setText(String.format("Total Amount: R$ %.2f", total));
         } catch (NumberFormatException e) {
-            showAlert("Erro", "Por favor, insira valores numéricos válidos.");
+            showAlert("Error", "Please enter valid numeric values.");
         }
     }
 
@@ -179,12 +202,12 @@ public class RentalForm extends VBox {
         Vehicle selectedVehicle = vehicleTable.getSelectionModel().getSelectedItem();
 
         if (selectedCustomer == null) {
-            showAlert("Erro", "Por favor, selecione um cliente.");
+            showAlert("Error", "Please select a customer.");
             return;
         }
 
         if (selectedVehicle == null) {
-            showAlert("Erro", "Por favor, selecione um veículo.");
+            showAlert("Error", "Please select a vehicle.");
             return;
         }
 
@@ -194,7 +217,7 @@ public class RentalForm extends VBox {
             String pickupLocation = pickupLocationField.getText();
 
             if (pickupLocation.isEmpty()) {
-                showAlert("Erro", "Por favor, informe o local de retirada.");
+                showAlert("Error", "Please enter the pickup location.");
                 return;
             }
 
@@ -216,10 +239,10 @@ public class RentalForm extends VBox {
             }
 
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmAlert.setTitle("Confirmar Locação");
-            confirmAlert.setHeaderText("Deseja confirmar a locação?");
+            confirmAlert.setTitle("Confirm Rental");
+            confirmAlert.setHeaderText("Do you want to confirm the rental?");
             confirmAlert.setContentText(String.format(
-                    "Cliente: %s\nVeículo: %s\nPeríodo: %s a %s\nValor Total: R$ %.2f",
+                    "Customer: %s\nVehicle: %s\nPeriod: %s to %s\nTotal Amount: R$ %.2f",
                     selectedCustomer.getEmail(),
                     selectedVehicle.getFullName(),
                     start.toString(),
@@ -241,20 +264,45 @@ public class RentalForm extends VBox {
                 rental.setTotalAmount(total);
 
                 if (rentalService.createRental(rental)) {
-                    showAlert("Sucesso", "Locação registrada com sucesso!\nID: " + rental.getRentalId());
+                    showAlert("Success", "Rental registered successfully!\nID: " + rental.getRentalId());
                     List<Vehicle> vehicles = vehicleService.getAvailableVehiclesByType(typeName);
                     vehicleTable.setItems(FXCollections.observableArrayList(vehicles));
                 } else {
-                    showAlert("Erro", "Erro ao registrar a locação.");
+                    showAlert("Error", "Error registering rental.");
                 }
             }
         } catch (NumberFormatException e) {
-            showAlert("Erro", "Por favor, insira valores numéricos válidos.");
+            showAlert("Error", "Please enter valid numeric values.");
         }
     }
 
+    private void formatDatePicker(DatePicker datePicker) {
+        String pattern = "dd/MM/yyyy";
+        java.time.format.DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern(pattern);
+
+        datePicker.setConverter(new javafx.util.StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        });
+    }
+
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(title.equals("Erro") ? Alert.AlertType.ERROR : Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(title.equals("Error") ? Alert.AlertType.ERROR : Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

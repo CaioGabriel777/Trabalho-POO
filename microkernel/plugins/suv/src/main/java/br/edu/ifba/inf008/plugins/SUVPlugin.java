@@ -11,10 +11,7 @@ import javafx.event.EventHandler;
 
 import java.util.Map;
 
-/**
- * Plugin para veículos do tipo SUV.
- * Taxas adicionais: mileage_limit, extra_mileage_fee, offroad_fee
- */
+
 public class SUVPlugin implements IVehiclePlugin {
 
     private static final String TYPE_NAME = "SUV";
@@ -23,12 +20,12 @@ public class SUVPlugin implements IVehiclePlugin {
     public boolean init() {
         IUIController uiController = ICore.getInstance().getUIController();
 
-        MenuItem menuItem = uiController.createMenuItem("Locação", "SUV");
+        MenuItem menuItem = uiController.createMenuItem("Rental", "SUV");
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 RentalForm form = new RentalForm(TYPE_NAME, SUVPlugin.this);
-                uiController.createTab("Locação - SUV", form);
+                uiController.createTab("Rental - SUV", form);
             }
         });
 
@@ -44,7 +41,7 @@ public class SUVPlugin implements IVehiclePlugin {
     public double calculateTotal(double baseRate, int days, double insuranceFee, Map<String, Double> additionalFees) {
         double total = (baseRate * days) + insuranceFee;
 
-        // Adiciona taxas com sufixo "_fee" (inclui offroad_fee para SUV)
+
         for (Map.Entry<String, Double> entry : additionalFees.entrySet()) {
             if (entry.getKey().endsWith("_fee")) {
                 total += entry.getValue();

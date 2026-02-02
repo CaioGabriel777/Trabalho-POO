@@ -21,7 +21,6 @@ public class VehicleType {
         this.additionalFees = new HashMap<>();
     }
 
-    // Getters
     public int getTypeId() {
         return typeId;
     }
@@ -70,7 +69,6 @@ public class VehicleType {
         return additionalFees;
     }
 
-    // Setters
     public void setTypeId(int typeId) {
         this.typeId = typeId;
     }

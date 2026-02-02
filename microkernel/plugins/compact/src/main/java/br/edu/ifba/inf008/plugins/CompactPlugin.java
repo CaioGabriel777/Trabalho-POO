@@ -11,10 +11,7 @@ import javafx.event.EventHandler;
 
 import java.util.Map;
 
-/**
- * Plugin para veículos do tipo COMPACT.
- * Taxas adicionais: mileage_limit, extra_mileage_fee
- */
+
 public class CompactPlugin implements IVehiclePlugin {
 
     private static final String TYPE_NAME = "COMPACT";
@@ -23,12 +20,12 @@ public class CompactPlugin implements IVehiclePlugin {
     public boolean init() {
         IUIController uiController = ICore.getInstance().getUIController();
 
-        MenuItem menuItem = uiController.createMenuItem("Locação", "Compact");
+        MenuItem menuItem = uiController.createMenuItem("Rental", "Compact");
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 RentalForm form = new RentalForm(TYPE_NAME, CompactPlugin.this);
-                uiController.createTab("Locação - Compact", form);
+                uiController.createTab("Rental - Compact", form);
             }
         });
 
@@ -44,7 +41,7 @@ public class CompactPlugin implements IVehiclePlugin {
     public double calculateTotal(double baseRate, int days, double insuranceFee, Map<String, Double> additionalFees) {
         double total = (baseRate * days) + insuranceFee;
 
-        // Adiciona taxas com sufixo "_fee"
+
         for (Map.Entry<String, Double> entry : additionalFees.entrySet()) {
             if (entry.getKey().endsWith("_fee")) {
                 total += entry.getValue();
