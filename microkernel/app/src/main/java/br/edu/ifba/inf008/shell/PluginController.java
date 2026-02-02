@@ -12,7 +12,7 @@ import java.net.URLClassLoader;
 public class PluginController implements IPluginController {
     public boolean init() {
         try {
-            // Tenta múltiplos caminhos para encontrar a pasta plugins
+
             String[] possiblePaths = {
                     "./plugins",
                     "../plugins",
@@ -35,7 +35,6 @@ public class PluginController implements IPluginController {
                 return true;
             }
 
-            // Define a FilenameFilter to include only .jar files
             FilenameFilter jarFilter = new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
