@@ -2,6 +2,7 @@ br\edu\ifba\inf008\interfaces\models\Rental.class
 br\edu\ifba\inf008\interfaces\models\Vehicle.class
 br\edu\ifba\inf008\interfaces\DatabaseConnection.class
 br\edu\ifba\inf008\interfaces\IVehiclePlugin.class
+br\edu\ifba\inf008\interfaces\ui\RentalForm$1.class
 br\edu\ifba\inf008\interfaces\services\RentalService.class
 br\edu\ifba\inf008\interfaces\models\Customer.class
 br\edu\ifba\inf008\interfaces\services\VehicleService.class
@@ -12,5 +13,7 @@ br\edu\ifba\inf008\interfaces\IAuthenticationController.class
 br\edu\ifba\inf008\interfaces\IPlugin.class
 br\edu\ifba\inf008\interfaces\ICore.class
 br\edu\ifba\inf008\interfaces\IUIController.class
+br\edu\ifba\inf008\interfaces\ui\RentalForm$3.class
 br\edu\ifba\inf008\interfaces\services\CustomerService.class
+br\edu\ifba\inf008\interfaces\ui\RentalForm$2.class
 br\edu\ifba\inf008\interfaces\models\VehicleType.class

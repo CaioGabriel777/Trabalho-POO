@@ -18,7 +18,6 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    // Getters
     public int getVehicleId() {
         return vehicleId;
     }
@@ -71,7 +70,6 @@ public class Vehicle {
         return currentLocation;
     }
 
-    // Setters
     public void setVehicleId(int vehicleId) {
         this.vehicleId = vehicleId;
     }

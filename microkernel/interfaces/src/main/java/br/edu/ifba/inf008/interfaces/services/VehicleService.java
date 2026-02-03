@@ -79,7 +79,6 @@ public class VehicleService {
                 type.setMaxLuggage(rs.getInt("max_luggage"));
                 type.setSpecialFeatures(rs.getString("special_features"));
 
-                // Parse JSON additional_fees
                 String additionalFeesJson = rs.getString("additional_fees");
                 if (additionalFeesJson != null) {
                     type.setAdditionalFees(parseAdditionalFees(additionalFeesJson));

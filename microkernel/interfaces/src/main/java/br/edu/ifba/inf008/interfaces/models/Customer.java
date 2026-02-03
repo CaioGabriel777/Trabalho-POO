@@ -23,7 +23,6 @@ public class Customer {
         this.phone = phone;
     }
 
-    // Getters
     public int getCustomerId() {
         return customerId;
     }
@@ -52,7 +51,6 @@ public class Customer {
         return phone;
     }
 
-    // Setters
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }

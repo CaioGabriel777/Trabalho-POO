@@ -11,10 +11,7 @@ import javafx.event.EventHandler;
 
 import java.util.Map;
 
-/**
- * Plugin para veículos do tipo LUXURY.
- * Taxas adicionais: concierge_fee, chauffeur_fee
- */
+
 public class LuxoPlugin implements IVehiclePlugin {
 
     private static final String TYPE_NAME = "LUXURY";
@@ -23,12 +20,12 @@ public class LuxoPlugin implements IVehiclePlugin {
     public boolean init() {
         IUIController uiController = ICore.getInstance().getUIController();
 
-        MenuItem menuItem = uiController.createMenuItem("Locação", "Luxo");
+        MenuItem menuItem = uiController.createMenuItem("Rental", "Luxury");
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 RentalForm form = new RentalForm(TYPE_NAME, LuxoPlugin.this);
-                uiController.createTab("Locação - Luxo", form);
+                uiController.createTab("Rental - Luxury", form);
             }
         });
 
@@ -44,8 +41,7 @@ public class LuxoPlugin implements IVehiclePlugin {
     public double calculateTotal(double baseRate, int days, double insuranceFee, Map<String, Double> additionalFees) {
         double total = (baseRate * days) + insuranceFee;
 
-        // Adiciona taxas com sufixo "_fee" (inclui concierge_fee e chauffeur_fee para
-        // LUXURY)
+
         for (Map.Entry<String, Double> entry : additionalFees.entrySet()) {
             if (entry.getKey().endsWith("_fee")) {
                 total += entry.getValue();

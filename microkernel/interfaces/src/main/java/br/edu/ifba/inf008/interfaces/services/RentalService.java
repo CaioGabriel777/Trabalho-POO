@@ -44,7 +44,6 @@ public class RentalService {
                     rental.setRentalId(generatedKeys.getInt(1));
                 }
 
-                // Update vehicle status to RENTED
                 vehicleService.updateVehicleStatus(rental.getVehicleId(), "RENTED");
                 return true;
             }

@@ -11,10 +11,7 @@ import javafx.event.EventHandler;
 
 import java.util.Map;
 
-/**
- * Plugin para veículos do tipo ECONOMY.
- * Taxas adicionais: mileage_limit, extra_mileage_fee
- */
+
 public class EconomicoPlugin implements IVehiclePlugin {
 
     private static final String TYPE_NAME = "ECONOMY";
@@ -23,12 +20,12 @@ public class EconomicoPlugin implements IVehiclePlugin {
     public boolean init() {
         IUIController uiController = ICore.getInstance().getUIController();
 
-        MenuItem menuItem = uiController.createMenuItem("Locação", "Econômico");
+        MenuItem menuItem = uiController.createMenuItem("Rental", "Economy");
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 RentalForm form = new RentalForm(TYPE_NAME, EconomicoPlugin.this);
-                uiController.createTab("Locação - Econômico", form);
+                uiController.createTab("Rental - Economy", form);
             }
         });
 
@@ -44,7 +41,7 @@ public class EconomicoPlugin implements IVehiclePlugin {
     public double calculateTotal(double baseRate, int days, double insuranceFee, Map<String, Double> additionalFees) {
         double total = (baseRate * days) + insuranceFee;
 
-        // Adiciona taxas com sufixo "_fee"
+
         for (Map.Entry<String, Double> entry : additionalFees.entrySet()) {
             if (entry.getKey().endsWith("_fee")) {
                 total += entry.getValue();

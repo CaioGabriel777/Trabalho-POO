@@ -20,22 +20,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Plugin Relatório 1: Gráfico de pizza com distribuição de veículos por tipo de
- * combustível.
- */
 public class Relatorio1Plugin implements IPlugin {
 
     @Override
     public boolean init() {
         IUIController uiController = ICore.getInstance().getUIController();
 
-        MenuItem menuItem = uiController.createMenuItem("Relatórios", "Distribuição por Combustível");
+        MenuItem menuItem = uiController.createMenuItem("Reports", "Fuel Distribution");
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 VBox content = createReportContent();
-                uiController.createTab("Relatório - Combustível", content);
+                uiController.createTab("Report - Fuel", content);
             }
         });
 
@@ -46,12 +42,11 @@ public class Relatorio1Plugin implements IPlugin {
         VBox vbox = new VBox(15);
         vbox.setPadding(new Insets(20));
 
-        Label titleLabel = new Label("Distribuição de Veículos por Tipo de Combustível");
+        Label titleLabel = new Label("Vehicle Distribution by Fuel Type");
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
-        // Query from report1.sql
         String sql = """
                 SELECT
                     v.fuel_type,
@@ -87,40 +82,19 @@ public class Relatorio1Plugin implements IPlugin {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            Label errorLabel = new Label("Erro ao carregar dados: " + e.getMessage());
+            Label errorLabel = new Label("Error loading data: " + e.getMessage());
             errorLabel.setStyle("-fx-text-fill: red;");
             vbox.getChildren().addAll(titleLabel, errorLabel);
             return vbox;
         }
 
         PieChart pieChart = new PieChart(pieChartData);
-        pieChart.setTitle("Tipos de Combustível");
+        pieChart.setTitle("Fuel Types");
         pieChart.setLabelsVisible(true);
         pieChart.setLegendVisible(true);
         pieChart.setPrefSize(600, 400);
 
-        // Apply colors after chart is rendered
-        for (int i = 0; i < pieChartData.size(); i++) {
-            PieChart.Data data = pieChartData.get(i);
-            String color = getColorForFuelType(data.getName());
-            data.getNode().setStyle("-fx-pie-color: " + color + ";");
-        }
-
         vbox.getChildren().addAll(titleLabel, pieChart);
         return vbox;
-    }
-
-    private String getColorForFuelType(String label) {
-        if (label.contains("GASOLINE"))
-            return "#FF6B6B";
-        if (label.contains("DIESEL"))
-            return "#4ECDC4";
-        if (label.contains("ELECTRIC"))
-            return "#45B7D1";
-        if (label.contains("HYBRID"))
-            return "#96CEB4";
-        if (label.contains("CNG"))
-            return "#FFEAA7";
-        return "#D9D9D9";
     }
 }
