@@ -27,7 +27,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Relatorio2Plugin implements IPlugin {
 
     @Override
@@ -55,7 +54,6 @@ public class Relatorio2Plugin implements IPlugin {
 
         TableView<RentalReport> tableView = new TableView<>();
         tableView.setPrefHeight(500);
-
 
         TableColumn<RentalReport, Integer> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(cellData -> cellData.getValue().rentalIdProperty().asObject());
@@ -97,13 +95,12 @@ public class Relatorio2Plugin implements IPlugin {
                 vehicleTypeCol, startDateCol, totalCol,
                 rentalStatusCol, paymentStatusCol);
 
-
         ObservableList<RentalReport> data = loadReportData();
         tableView.setItems(data);
 
         Label countLabel = new Label("Total records: " + data.size());
         countLabel.setStyle("-fx-font-style: italic;");
-        
+
         vbox.getChildren().addAll(titleLabel, tableView, countLabel);
         return vbox;
     }
@@ -111,11 +108,14 @@ public class Relatorio2Plugin implements IPlugin {
     private ObservableList<RentalReport> loadReportData() {
         List<RentalReport> reports = new ArrayList<>();
 
-
         String sql = """
                 SELECT
                     r.rental_id,
-                    COALESCE(c.company_name, CONCAT(c.first_name, ' ', c.last_name)) as customer_name,
+                    CASE
+                        WHEN c.company_name IS NOT NULL AND c.company_name != ''
+                            THEN c.company_name
+                        ELSE CONCAT(IFNULL(c.first_name, ''), ' ', IFNULL(c.last_name, ''))
+                    END as customer_name,
                     c.customer_type,
                     CONCAT(v.make, ' ', v.model) as vehicle,
                     vt.type_name as vehicle_type,
@@ -154,7 +154,6 @@ public class Relatorio2Plugin implements IPlugin {
 
         return FXCollections.observableArrayList(reports);
     }
-
 
     public static class RentalReport {
         private final SimpleIntegerProperty rentalId;
