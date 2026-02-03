@@ -4,8 +4,8 @@
 - [Caio Gabriel Cruz Amorim](https://github.com/CaioGabriel777)
 - [Luan Vitor Ribeiro Guimarães](https://github.com/LuanVitorRibeiroGuimaraes)
 
-## Introdução
-Falar sobre o projeto
+## Link do vídeo
+[Vídeo YouTube](https://youtube.com)
 
 ## Tecnologias
 - **Java 25**
@@ -15,7 +15,12 @@ Falar sobre o projeto
 - **MariaDB**
 
 ## Funcionalidades
-Falar sobre as funcionalidades
+- **Nova Locação**: Formulário para alugar veículos com seleção de cliente, veículo disponível, datas e cálculo automático do valor
+- **6 Tipos de Veículos**: Economy, Compact, SUV, Luxury, VAN e Electric (cada um como plugin independente)
+- **Cálculo Polimórfico**: Cada tipo de veículo pode ter sua própria lógica de precificação via `calculateTotal()`
+- **Relatório de Combustível**: Gráfico de pizza mostrando distribuição da frota por tipo de combustível
+- **Relatório de Locações**: Tabela com as últimas 100 locações realizadas
+- **Plugins Dinâmicos**: Novos tipos de veículos podem ser adicionados sem recompilar o sistema
 
 ## Instruções de Execução
 - **Subir o Banco de Dados**: 
