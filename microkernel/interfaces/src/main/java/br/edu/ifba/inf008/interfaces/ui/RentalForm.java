@@ -10,7 +10,6 @@ import br.edu.ifba.inf008.interfaces.services.VehicleService;
 import br.edu.ifba.inf008.interfaces.IVehiclePlugin;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -33,6 +32,7 @@ public class RentalForm extends VBox {
     private TextField baseRateField;
     private TextField insuranceFeeField;
     private Label totalLabel;
+    private Label additionalFeesLabel;
     private Button confirmButton;
 
     private String typeName;
@@ -146,6 +146,9 @@ public class RentalForm extends VBox {
         totalLabel = new Label("Total Amount: R$ 0.00");
         totalLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2196F3;");
 
+        additionalFeesLabel = new Label("Additional Fees: R$ 0.00");
+        additionalFeesLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+
         Button calculateButton = new Button("Calculate Total");
         calculateButton.setOnAction(e -> calculateTotal());
 
@@ -158,7 +161,7 @@ public class RentalForm extends VBox {
                 customerLabel, customerComboBox,
                 vehicleLabel, vehicleTable,
                 formGrid,
-                calculateButton, totalLabel,
+                calculateButton, additionalFeesLabel, totalLabel,
                 confirmButton);
     }
 
@@ -173,6 +176,17 @@ public class RentalForm extends VBox {
         if (vehicleType != null) {
             baseRateField.setText(String.valueOf(vehicleType.getDailyRate()));
             insuranceFeeField.setText(String.valueOf(vehicleType.getInsuranceRate()));
+
+            // Exibir taxas adicionais
+            double totalFees = 0;
+            if (vehicleType.getAdditionalFees() != null) {
+                for (java.util.Map.Entry<String, Double> entry : vehicleType.getAdditionalFees().entrySet()) {
+                    if (entry.getKey().endsWith("_fee")) {
+                        totalFees += entry.getValue();
+                    }
+                }
+            }
+            additionalFeesLabel.setText(String.format("Additional Fees: R$ %.2f", totalFees));
         }
     }
 
@@ -183,6 +197,12 @@ public class RentalForm extends VBox {
 
             LocalDate start = startDatePicker.getValue();
             LocalDate end = endDatePicker.getValue();
+
+            if (end.isBefore(start)) {
+                showAlert("Error", "End date cannot be before start date.");
+                return;
+            }
+
             int days = (int) ChronoUnit.DAYS.between(start, end);
             if (days <= 0)
                 days = 1;
@@ -223,6 +243,12 @@ public class RentalForm extends VBox {
 
             LocalDate start = startDatePicker.getValue();
             LocalDate end = endDatePicker.getValue();
+
+            if (end.isBefore(start)) {
+                showAlert("Error", "End date cannot be before start date.");
+                return;
+            }
+
             int days = (int) ChronoUnit.DAYS.between(start, end);
             if (days <= 0)
                 days = 1;
@@ -281,6 +307,7 @@ public class RentalForm extends VBox {
         java.time.format.DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern(pattern);
 
         datePicker.setConverter(new javafx.util.StringConverter<LocalDate>() {
+
             @Override
             public String toString(LocalDate date) {
                 if (date != null) {

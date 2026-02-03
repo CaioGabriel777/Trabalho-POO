@@ -3,7 +3,6 @@ package br.edu.ifba.inf008.shell;
 import br.edu.ifba.inf008.App;
 import br.edu.ifba.inf008.interfaces.IPluginController;
 import br.edu.ifba.inf008.interfaces.IPlugin;
-import br.edu.ifba.inf008.interfaces.ICore;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
@@ -36,10 +35,12 @@ public class PluginController implements IPluginController {
             }
 
             FilenameFilter jarFilter = new FilenameFilter() {
+
                 @Override
                 public boolean accept(File dir, String name) {
                     return name.toLowerCase().endsWith(".jar");
                 }
+                
             };
 
             String[] plugins = currentDir.list(jarFilter);

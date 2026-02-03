@@ -20,7 +20,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 public class Relatorio1Plugin implements IPlugin {
 
     @Override
@@ -47,7 +46,6 @@ public class Relatorio1Plugin implements IPlugin {
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-
 
         String sql = """
                 SELECT
@@ -96,28 +94,7 @@ public class Relatorio1Plugin implements IPlugin {
         pieChart.setLegendVisible(true);
         pieChart.setPrefSize(600, 400);
 
-
-        for (int i = 0; i < pieChartData.size(); i++) {
-            PieChart.Data data = pieChartData.get(i);
-            String color = getColorForFuelType(data.getName());
-            data.getNode().setStyle("-fx-pie-color: " + color + ";");
-        }
-
         vbox.getChildren().addAll(titleLabel, pieChart);
         return vbox;
-    }
-
-    private String getColorForFuelType(String label) {
-        if (label.contains("GASOLINE"))
-            return "#FF6B6B";
-        if (label.contains("DIESEL"))
-            return "#4ECDC4";
-        if (label.contains("ELECTRIC"))
-            return "#45B7D1";
-        if (label.contains("HYBRID"))
-            return "#96CEB4";
-        if (label.contains("CNG"))
-            return "#FFEAA7";
-        return "#D9D9D9";
     }
 }
