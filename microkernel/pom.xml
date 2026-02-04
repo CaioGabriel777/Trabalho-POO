@@ -11,11 +11,19 @@
     <modules>
         <module>interfaces</module>
         <module>app</module>
-        <module>plugins/myplugin</module>
+        <module>plugins/economico</module>
+        <module>plugins/compact</module>
+        <module>plugins/suv</module>
+        <module>plugins/luxo</module>
+        <module>plugins/van</module>
+        <module>plugins/eletrico</module>
+        <module>plugins/relatorio1</module>
+        <module>plugins/relatorio2</module>
     </modules>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
