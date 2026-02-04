@@ -5,7 +5,7 @@
 - [Luan Vitor Ribeiro Guimarães](https://github.com/LuanVitorRibeiroGuimaraes)
 
 ## Link do vídeo
-[Vídeo YouTube](https://youtube.com)
+[Vídeo YouTube](https://www.youtube.com/watch?v=k6DXEJ8qCv8)
 
 ## Tecnologias
 - **Java 25**
@@ -38,6 +38,11 @@ mvn clean package -DskipTests
 cd microkernel
 mvn javafx:run -pl app
 ```
+##### ℹ️ Ou dentro da pasta app
+```bash
+mvn exec:java
+```
+
 
 - **Comandos Completos:**
 ##### ⚠️ Esteja na raiz do projeto
@@ -48,3 +53,6 @@ cd ../microkernel
 mvn clean package -DskipTests
 mvn javafx:run -pl app
 ```
+
+
+
